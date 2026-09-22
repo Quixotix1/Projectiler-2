@@ -1,3 +1,78 @@
-[gd_scene format=3 uid="uid://oifk4csl8fo8"]
+[gd_scene load_steps=9 format=3 uid="uid://b2x2ga32644gh"]
 
-[node name="Node2D" type="Node2D"]
+[ext_resource type="Script" path="res://Scripts/camera_follow.gd" id="1_wn7y1"]
+[ext_resource type="PackedScene" uid="uid://bxes3q0qmvb2y" path="res://Scenes/player.tscn" id="2_qex66"]
+[ext_resource type="PackedScene" uid="uid://bbgdgjujs8nqn" path="res://Scenes/Enemies/basic_enemy.tscn" id="3_bq3cu"]
+[ext_resource type="Script" path="res://Scripts/Enemies/basic_enemy.gd" id="4_kele4"]
+[ext_resource type="PackedScene" uid="uid://bve1ptvbl141m" path="res://Scenes/Bullets/plain_bullet.tscn" id="5_g8yl8"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_w8px7"]
+albedo_color = Color(0, 0, 0, 1)
+metallic_specular = 0.2
+
+[sub_resource type="QuadMesh" id="QuadMesh_powea"]
+material = SubResource("StandardMaterial3D_w8px7")
+size = Vector2(100, 100)
+
+[sub_resource type="Environment" id="Environment_oce5p"]
+ssao_intensity = 16.0
+glow_enabled = true
+
+[node name="Game" type="Node3D"]
+
+[node name="Lighting" type="Node3D" parent="."]
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="Lighting"]
+transform = Transform3D(0.5, 0.433013, -0.75, 0, 0.866025, 0.5, 0.866025, -0.25, 0.433013, 0, 0, 0)
+light_energy = 0.5
+shadow_enabled = true
+sky_mode = 1
+
+[node name="Floor" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.10352e-05, 4.76837e-07, -0.00693727)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Floor"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0)
+mesh = SubResource("QuadMesh_powea")
+
+[node name="CameraPivot" type="Marker3D" parent="." node_paths=PackedStringArray("player")]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0)
+script = ExtResource("1_wn7y1")
+player = NodePath("../Player")
+camera_offset_mode_delta = 5.0
+camera_offset_mode_time = 0.35
+
+[node name="Camera3D" type="Camera3D" parent="CameraPivot"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 18)
+environment = SubResource("Environment_oce5p")
+
+[node name="Player" parent="." node_paths=PackedStringArray("camera") groups=["Player"] instance=ExtResource("2_qex66")]
+camera = NodePath("../CameraPivot/Camera3D")
+bullet = ExtResource("5_g8yl8")
+speed = 15.0
+rotation_speed = 0.075
+
+[node name="BasicEnemy5" parent="." groups=["Enemy"] instance=ExtResource("3_bq3cu")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -22.3557, 5.72205e-06, 14.1417)
+script = ExtResource("4_kele4")
+speed = 10.0
+
+[node name="BasicEnemy4" parent="." groups=["Enemy"] instance=ExtResource("3_bq3cu")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.804075, 7.62939e-06, 18.9852)
+script = ExtResource("4_kele4")
+speed = 10.0
+
+[node name="BasicEnemy3" parent="." groups=["Enemy"] instance=ExtResource("3_bq3cu")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -13.8496, 3.8147e-06, -17.8296)
+script = ExtResource("4_kele4")
+speed = 10.0
+
+[node name="BasicEnemy2" parent="." groups=["Enemy"] instance=ExtResource("3_bq3cu")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12.5998, 1.90735e-06, -22.1703)
+script = ExtResource("4_kele4")
+speed = 10.0
+
+[node name="BasicEnemy" parent="." groups=["Enemy"] instance=ExtResource("3_bq3cu")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 18.8706, 0, 0)
+script = ExtResource("4_kele4")
+speed = 10.0

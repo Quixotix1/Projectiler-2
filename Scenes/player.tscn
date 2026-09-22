@@ -1,0 +1,34 @@
+[gd_scene load_steps=6 format=3 uid="uid://bxes3q0qmvb2y"]
+
+[ext_resource type="PackedScene" uid="uid://3pwsh5w86qwe" path="res://Models/player.glb" id="1_h3a0f"]
+[ext_resource type="Script" path="res://Scripts/player.gd" id="1_rqqwd"]
+[ext_resource type="PackedScene" uid="uid://dbfu63pnlx1ey" path="res://Models/aimer.glb" id="3_ixgnx"]
+[ext_resource type="PackedScene" uid="uid://dgjx64vd3yf1a" path="res://Scenes/health_component.tscn" id="4_aunqj"]
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_178ph"]
+radius = 0.793962
+
+[node name="Player" type="CharacterBody3D"]
+script = ExtResource("1_rqqwd")
+
+[node name="Anchor" type="Node3D" parent="."]
+
+[node name="Model" parent="Anchor" instance=ExtResource("1_h3a0f")]
+
+[node name="GunAnchor" type="Node3D" parent="."]
+
+[node name="Gun" parent="GunAnchor" instance=ExtResource("3_ixgnx")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2)
+
+[node name="Collider" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.98023e-06, -0.00429931, 0.000292778)
+shape = SubResource("CylinderShape3D_178ph")
+
+[node name="HealthComponent" parent="." instance=ExtResource("4_aunqj")]
+collision_layer = 2
+collision_mask = 20
+max_health = 100
+
+[node name="Collider" type="CollisionShape3D" parent="HealthComponent"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.98023e-06, -0.00429931, 0.000292778)
+shape = SubResource("CylinderShape3D_178ph")
