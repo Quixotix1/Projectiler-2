@@ -14,6 +14,10 @@ config/name="Projectiler 2"
 config/features=PackedStringArray("4.3", "Forward Plus")
 config/icon="res://icon.svg"
 
+[autoload]
+
+WaveInfoTracker="*res://Scripts/wave_information_tracker.gd"
+
 [display]
 
 window/size/viewport_width=2560

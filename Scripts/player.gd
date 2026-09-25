@@ -35,8 +35,8 @@ func _update_movement():
 	
 	if Input.is_action_just_pressed("fire"): # To-do: THIS SOLUTION IS DUMB AND BAD AND SHOULD BE DECOUPLED FROM THE PLAYER SCRIPT
 		var bullet_instance = bullet.instantiate()
-		bullet_instance.global_position = $GunAnchor/Gun.global_position
-		bullet_instance.rotation.y = $GunAnchor.rotation.y
+		bullet_instance.global_position = $Gun/Model.global_position
+		bullet_instance.rotation.y = rotation.y + $Gun.rotation.y
 		owner.add_child(bullet_instance)
 	
 	if input_direction != Vector3.ZERO:
@@ -58,9 +58,9 @@ func _update_aim():
 		mouse_position = mouse_position.normalized()
 	
 	if mouse_position.x > 0:
-		$GunAnchor.rotation.y = asin(mouse_position.y) - PI / 2
+		$Gun.rotation.y = asin(mouse_position.y) - PI / 2
 	else:
-		$GunAnchor.rotation.y = PI / 2 - asin(mouse_position.y)
+		$Gun.rotation.y = PI / 2 - asin(mouse_position.y)
 
 func _physics_process(delta: float) -> void:
 	_update_rotation()

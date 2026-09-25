@@ -1,5 +1,6 @@
-[gd_scene load_steps=5 format=3 uid="uid://bbgdgjujs8nqn"]
+[gd_scene load_steps=6 format=3 uid="uid://bbgdgjujs8nqn"]
 
+[ext_resource type="Script" path="res://Scripts/Enemies/basic_enemy.gd" id="1_6givy"]
 [ext_resource type="PackedScene" uid="uid://dnfr16bv41517" path="res://Models/basic_enemy.glb" id="1_nroh6"]
 [ext_resource type="PackedScene" uid="uid://dgjx64vd3yf1a" path="res://Scenes/health_component.tscn" id="2_abaab"]
 
@@ -9,7 +10,10 @@ size = Vector3(1.2, 0.5, 1)
 [sub_resource type="BoxShape3D" id="BoxShape3D_n68x1"]
 size = Vector3(1, 0.388733, 1.55371)
 
-[node name="BasicEnemy" type="CharacterBody3D"]
+[node name="BasicEnemy" type="CharacterBody3D" groups=["Enemy"]]
+script = ExtResource("1_6givy")
+damage = 10.0
+speed = 10.0
 
 [node name="Model" parent="." instance=ExtResource("1_nroh6")]
 transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 0, 0, 0)

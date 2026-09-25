@@ -15,9 +15,9 @@ script = ExtResource("1_rqqwd")
 
 [node name="Model" parent="Anchor" instance=ExtResource("1_h3a0f")]
 
-[node name="GunAnchor" type="Node3D" parent="."]
+[node name="Gun" type="Node3D" parent="."]
 
-[node name="Gun" parent="GunAnchor" instance=ExtResource("3_ixgnx")]
+[node name="Model" parent="Gun" instance=ExtResource("3_ixgnx")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2)
 
 [node name="Collider" type="CollisionShape3D" parent="."]
@@ -27,7 +27,7 @@ shape = SubResource("CylinderShape3D_178ph")
 [node name="HealthComponent" parent="." instance=ExtResource("4_aunqj")]
 collision_layer = 2
 collision_mask = 20
-max_health = 100
+max_health = 30
 
 [node name="Collider" type="CollisionShape3D" parent="HealthComponent"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.98023e-06, -0.00429931, 0.000292778)

@@ -1,0 +1,15 @@
+[gd_scene load_steps=3 format=3 uid="uid://dpoou7lhsfps1"]
+
+[ext_resource type="Script" path="res://Scripts/enemy_spawner.gd" id="1_rares"]
+[ext_resource type="PackedScene" uid="uid://bbgdgjujs8nqn" path="res://Scenes/Enemies/basic_enemy.tscn" id="2_ryd4c"]
+
+[node name="EnemySpawner" type="Node3D"]
+script = ExtResource("1_rares")
+enemy = ExtResource("2_ryd4c")
+spawn_delay = 2.0
+min_distance = 10.0
+max_distance = 15.0
+
+[node name="SpawnTimer" type="Timer" parent="."]
+
+[connection signal="timeout" from="SpawnTimer" to="." method="_on_spawn_timer_timeout"]

@@ -1,10 +1,10 @@
-[gd_scene load_steps=9 format=3 uid="uid://b2x2ga32644gh"]
+[gd_scene load_steps=10 format=3 uid="uid://b2x2ga32644gh"]
 
 [ext_resource type="Script" path="res://Scripts/camera_follow.gd" id="1_wn7y1"]
 [ext_resource type="PackedScene" uid="uid://bxes3q0qmvb2y" path="res://Scenes/player.tscn" id="2_qex66"]
-[ext_resource type="PackedScene" uid="uid://bbgdgjujs8nqn" path="res://Scenes/Enemies/basic_enemy.tscn" id="3_bq3cu"]
-[ext_resource type="Script" path="res://Scripts/Enemies/basic_enemy.gd" id="4_kele4"]
+[ext_resource type="PackedScene" uid="uid://dpoou7lhsfps1" path="res://Scenes/enemy_spawner.tscn" id="4_tpbdw"]
 [ext_resource type="PackedScene" uid="uid://bve1ptvbl141m" path="res://Scenes/Bullets/plain_bullet.tscn" id="5_g8yl8"]
+[ext_resource type="PackedScene" uid="uid://fii7ujrbqbub" path="res://Scenes/wave_manager.tscn" id="5_kscpe"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_w8px7"]
 albedo_color = Color(0, 0, 0, 1)
@@ -17,6 +17,9 @@ size = Vector2(100, 100)
 [sub_resource type="Environment" id="Environment_oce5p"]
 ssao_intensity = 16.0
 glow_enabled = true
+
+[sub_resource type="Theme" id="Theme_f3ltc"]
+default_font_size = 60
 
 [node name="Game" type="Node3D"]
 
@@ -52,27 +55,29 @@ bullet = ExtResource("5_g8yl8")
 speed = 15.0
 rotation_speed = 0.075
 
-[node name="BasicEnemy5" parent="." groups=["Enemy"] instance=ExtResource("3_bq3cu")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -22.3557, 5.72205e-06, 14.1417)
-script = ExtResource("4_kele4")
-speed = 10.0
+[node name="EnemySpawner" parent="." instance=ExtResource("4_tpbdw")]
+min_distance = 500.0
+max_distance = 2500.0
 
-[node name="BasicEnemy4" parent="." groups=["Enemy"] instance=ExtResource("3_bq3cu")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.804075, 7.62939e-06, 18.9852)
-script = ExtResource("4_kele4")
-speed = 10.0
+[node name="WaveManager" parent="." node_paths=PackedStringArray("next_wave_button", "enemy_spawner") instance=ExtResource("5_kscpe")]
+next_wave_button = NodePath("../NextWaveButton")
+enemy_spawner = NodePath("../EnemySpawner")
 
-[node name="BasicEnemy3" parent="." groups=["Enemy"] instance=ExtResource("3_bq3cu")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -13.8496, 3.8147e-06, -17.8296)
-script = ExtResource("4_kele4")
-speed = 10.0
+[node name="NextWaveButton" type="Button" parent="."]
+offset_left = 1944.0
+offset_top = 1398.0
+offset_right = 2472.0
+offset_bottom = 1526.0
 
-[node name="BasicEnemy2" parent="." groups=["Enemy"] instance=ExtResource("3_bq3cu")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12.5998, 1.90735e-06, -22.1703)
-script = ExtResource("4_kele4")
-speed = 10.0
+[node name="RichTextLabel" type="RichTextLabel" parent="NextWaveButton"]
+layout_mode = 0
+offset_left = 39.0
+offset_top = 25.0
+offset_right = 370.0
+offset_bottom = 111.0
+mouse_filter = 2
+theme = SubResource("Theme_f3ltc")
+bbcode_enabled = true
+text = "[b]Next Wave[/b]"
 
-[node name="BasicEnemy" parent="." groups=["Enemy"] instance=ExtResource("3_bq3cu")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 18.8706, 0, 0)
-script = ExtResource("4_kele4")
-speed = 10.0
+[connection signal="pressed" from="NextWaveButton" to="WaveManager" method="_on_next_wave_button_pressed"]

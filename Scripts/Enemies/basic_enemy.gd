@@ -2,6 +2,8 @@ class_name BasicEnemy
 
 extends Enemy
 
+@export var damage: float
+
 func _update_movement(delta: float) -> void:
 	look_at(player.position)
 	
