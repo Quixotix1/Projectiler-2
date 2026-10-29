@@ -1,6 +1,11 @@
 extends Bullet
 
 func _ready() -> void:
+	# TO-DO: Debug values should be removed
+	damage = 10.0
+	travel_speed = 15.0
+	lifespan = 3.0
+	
 	$destruction_timer.wait_time = lifespan
 	var velocity_vector_2 = Vector2(travel_speed, 0).rotated(rotation.y)
 	velocity.x = velocity_vector_2.x

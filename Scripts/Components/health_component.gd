@@ -20,11 +20,12 @@ func take_damage(value):
 	if health <= 0:
 		_die()
 
+# TO-DO: eh? this feels like it could be better but I'm not finding a solution right now
 func _die():
 	if not dead and get_parent().is_in_group("Enemy"):
 		WaveInfoTracker.remaining_enemies -= 1
 		dead = true
-	get_parent().queue_free() # this should use a subscribe model to avoid bugs
+	get_parent().queue_free()
 
 func _on_area_entered(area: Area3D) -> void:
 	if die_on_hit:

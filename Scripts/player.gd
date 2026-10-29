@@ -1,68 +1,61 @@
+class_name Player
+
 extends CharacterBody3D
 
-@export var camera: Camera3D
+@export_category("Objects")
 @export var bullet: PackedScene
+@export var spawner: Spawner
+@export var gun_object: Node
+@export var gun_anchor: Node
+
+# TO-DO: decouple into player information singleton when required
+@export_category("Values")
 @export var speed = 10.0
+@export var acceleration = 10.0
 @export var rotation_speed = 10.0
 
+var target_velocity = Vector3.ZERO # Player will accelerate to this velocity at "acceleration"
+
+var move_forward: Command
+var move_backward: Command
+var move_left: Command
+var move_right: Command
+var rotate_left: Command
+var rotate_right: Command
+var fire_command: Command
+var aim_command: Command
+
 func _ready() -> void:
-	pass
+	move_forward = MoveCommand.new(Vector3.FORWARD)
+	move_backward = MoveCommand.new(Vector3.BACK)
+	move_left = MoveCommand.new(Vector3.LEFT)
+	move_right = MoveCommand.new(Vector3.RIGHT)
+	rotate_left = RotateCommand.new(rotation_speed)
+	rotate_right = RotateCommand.new(-rotation_speed)
+	fire_command = FireCommand.new()
+	aim_command = AimCommand.new(get_viewport().get_camera_3d())
 
-func _update_rotation():
-	var input_rotation = 0
-	
+func _process_commands():
 	if Input.is_action_pressed("rotate_left"):
-		input_rotation = 1
+		rotate_left.execute(self)
 	if Input.is_action_pressed("rotate_right"):
-		input_rotation = -1
-	
-	input_rotation *= rotation_speed
-	
-	rotation.y += input_rotation
-
-func _update_movement():
-	var input_direction = Vector3.ZERO
-	var rotated_direction = Vector3.ZERO
-	
-	if Input.is_action_pressed("up"):
-		input_direction.z -= 1
-	if Input.is_action_pressed("down"):
-		input_direction.z += 1
+		rotate_right.execute(self)
 	if Input.is_action_pressed("left"):
-		input_direction.x -= 1
+		move_left.execute(self)
 	if Input.is_action_pressed("right"):
-		input_direction.x += 1
+		move_right.execute(self)
+	if Input.is_action_pressed("up"):
+		move_forward.execute(self)
+	if Input.is_action_pressed("down"):
+		move_backward.execute(self)
+	if Input.is_action_just_pressed("fire"):
+		fire_command.execute(self)
 	
-	if Input.is_action_just_pressed("fire"): # To-do: THIS SOLUTION IS DUMB AND BAD AND SHOULD BE DECOUPLED FROM THE PLAYER SCRIPT
-		var bullet_instance = bullet.instantiate()
-		bullet_instance.global_position = $Gun/Model.global_position
-		bullet_instance.rotation.y = rotation.y + $Gun.rotation.y
-		owner.add_child(bullet_instance)
-	
-	if input_direction != Vector3.ZERO:
-		rotated_direction.x = cos(-rotation.y) * input_direction.x - sin(-rotation.y) * input_direction.z
-		rotated_direction.z = sin(-rotation.y) * input_direction.x + cos(-rotation.y) * input_direction.z
-		rotated_direction = rotated_direction.normalized()
-	
-	velocity = rotated_direction * speed
-	
-	move_and_slide()
-
-func _update_aim():
-	var mouse_position = get_viewport().get_mouse_position()
-	mouse_position.x -= camera.unproject_position(position).x
-	mouse_position.y -= camera.unproject_position(position).y
-	mouse_position.y = -mouse_position.y
-	
-	if mouse_position != Vector2.ZERO:
-		mouse_position = mouse_position.normalized()
-	
-	if mouse_position.x > 0:
-		$Gun.rotation.y = asin(mouse_position.y) - PI / 2
-	else:
-		$Gun.rotation.y = PI / 2 - asin(mouse_position.y)
+	aim_command.execute(self)
 
 func _physics_process(delta: float) -> void:
-	_update_rotation()
-	_update_movement()
-	_update_aim()
+	_process_commands()
+	
+	velocity = velocity.move_toward(target_velocity, acceleration)
+	move_and_slide()
+	target_velocity = Vector3.ZERO # Reset for next frame

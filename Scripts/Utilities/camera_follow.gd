@@ -1,5 +1,6 @@
 extends Marker3D
 
+# TO-DO: The player reference could likely be optimized
 @export var player: Node3D
 @export var camera_offset_mode_delta: float
 @export var camera_offset_mode_time: float
@@ -9,6 +10,7 @@ var camera_is_offsetting = false
 
 var time_since_toggle = 0.0
 
+# TO-DO: Refactor with custom lerp DLL
 func _toggle_camera(delta: float):
 	time_since_toggle += delta
 	
@@ -27,6 +29,8 @@ func _toggle_camera(delta: float):
 		camera_offset_is_enabled = !camera_offset_is_enabled
 
 func _process(delta: float) -> void:
+	if not player:
+		return
 	global_position = player.global_position
 	global_rotation.y = player.global_rotation.y
 	
