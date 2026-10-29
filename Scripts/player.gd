@@ -11,7 +11,7 @@ extends CharacterBody3D
 # TO-DO: decouple into player information singleton when required
 @export_category("Values")
 @export var speed = 10.0
-@export var acceleration = 10.0
+@export var acceleration = 2.0
 @export var rotation_speed = 10.0
 
 var target_velocity = Vector3.ZERO # Player will accelerate to this velocity at "acceleration"

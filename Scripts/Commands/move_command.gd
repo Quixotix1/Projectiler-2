@@ -13,7 +13,7 @@ func execute(actor: Object = null):
 		push_error("Actor is not CharacterBody3D in MoveCommand.")
 		return
 	
-	var speed = 0.0
+	var speed = 1.0
 	
 	if actor.speed:
 		speed = actor.speed
